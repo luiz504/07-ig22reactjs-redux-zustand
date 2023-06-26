@@ -35,7 +35,7 @@ export const Module: FC<ModulePros> = ({
   }
 
   return (
-    <Collapsible.Root className="group">
+    <Collapsible.Root className="group" defaultOpen={moduleIndex === 0}>
       <Collapsible.Trigger asChild>
         <button className="flex w-full p-4 items-center gap-3  bg-zinc-800  border border-zinc-800 hover:bg-zinc-700         hover:border-zinc-700 transition  focus:outline-none focus:border-zinc-100">
           <div className="flex items-center justify-center h-10 w-10 rounded-full bg-zinc-950 text-xs">
