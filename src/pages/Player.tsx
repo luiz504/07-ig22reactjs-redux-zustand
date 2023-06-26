@@ -1,13 +1,30 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { MessageCircle } from 'lucide-react'
 
 import { Header } from '../components/Header'
 import { Video } from '../components/Video'
 import { Module } from '../components/Module'
 import { useStoreSelector } from '../store'
+import { start, usePlayerCurrents } from '../store/slices/player'
+import { api } from '../lib/axios'
+import { useDispatch } from 'react-redux'
 
 export const Player: React.FC = () => {
-  const modules = useStoreSelector((store) => store.player.course.modules)
+  const modules = useStoreSelector((store) => store.player.course?.modules)
+  const { currentLesson } = usePlayerCurrents()
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (currentLesson?.title) {
+      document.title = `Watching: ${currentLesson?.title}`
+    }
+  }, [currentLesson?.title])
+
+  useEffect(() => {
+    api.get('/courses/1').then(({ data }) => {
+      dispatch(start(data))
+    })
+  }, [dispatch])
 
   return (
     <div className="h-screen bg-zinc-950 text-zinc-50 flex justify-center items-center">
@@ -27,7 +44,7 @@ export const Player: React.FC = () => {
           </div>
 
           <aside className="w-80 absolute inset-y-0 right-0 border-l border-zinc-800 bg-zinc-900 divide-y-2 divide-zinc-900 overflow-y-scroll  scrollbar-thin scrollbar-track-zinc-950 scrollbar-thumb-zinc-800">
-            {modules.map((item, index) => (
+            {modules?.map((item, index) => (
               <Module
                 key={item.id}
                 moduleIndex={index}

@@ -6,7 +6,7 @@ import { Lesson } from './Lesson'
 
 import { useStoreSelector } from '../store'
 import { useDispatch } from 'react-redux'
-import { play } from '../store/slices/player'
+import { play, usePlayerCurrents } from '../store/slices/player'
 
 interface ModulePros {
   moduleIndex: number
@@ -20,15 +20,13 @@ export const Module: FC<ModulePros> = ({
   amountOfLessons,
 }) => {
   const dispatch = useDispatch()
+
+  const { currentLesson } = usePlayerCurrents()
   const module = useStoreSelector(
-    (store) => store.player.course.modules[moduleIndex],
+    (store) => store.player.course?.modules?.[moduleIndex],
   )
-  const currentLessonId = useStoreSelector((store) => {
-    const { currentModuleIndex, currentLessonIndex } = store.player
-    return store.player.course.modules[currentModuleIndex].lessons[
-      currentLessonIndex
-    ].id
-  })
+
+  const currentLessonId = currentLesson?.id
 
   const handlePlayLesson = (lessonIndex: number) => {
     dispatch(play({ moduleIndex, lessonIndex }))

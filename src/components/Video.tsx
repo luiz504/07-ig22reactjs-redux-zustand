@@ -1,14 +1,14 @@
-import React, { useEffect } from 'react'
 import ReactPlayer from 'react-player'
 import { useDispatch } from 'react-redux'
 
 import { next, usePlayerCurrents } from '../store/slices/player'
 
-export const Video: React.FC = () => {
+export const Video = () => {
   const dispatch = useDispatch()
   const { currentLesson } = usePlayerCurrents()
+  if (!currentLesson) return null
 
-  const currentLessonId = currentLesson.id
+  const currentLessonId = currentLesson?.id
 
   const videoURL = currentLessonId
     ? `https://www.youtube.com/watch?v=${currentLessonId}`
@@ -17,10 +17,6 @@ export const Video: React.FC = () => {
   const handlePlayNext = () => {
     dispatch(next())
   }
-
-  useEffect(() => {
-    document.title = `Watching: ${currentLesson.title}`
-  }, [currentLesson?.title])
 
   return (
     <div className="w-full bg-zinc-950 aspect-video">

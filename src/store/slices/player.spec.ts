@@ -1,8 +1,9 @@
 import { expect, describe, it } from 'vitest'
-import { next, play, playerReducer } from './player'
+import { PlayerState, next, play, playerReducer } from './player'
 
-const exampleState = {
+const exampleState: PlayerState = {
   course: {
+    id: 1,
     modules: [
       {
         id: '1',
