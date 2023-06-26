@@ -30,7 +30,7 @@ export const Player: React.FC = () => {
             {modules.map((item, index) => (
               <Module
                 key={item.id}
-                moduleIndex={index + 1}
+                moduleIndex={index}
                 title={item.title}
                 amountOfLessons={item.lessons.length}
               />
