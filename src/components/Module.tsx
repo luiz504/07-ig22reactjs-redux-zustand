@@ -23,6 +23,12 @@ export const Module: FC<ModulePros> = ({
   const module = useStoreSelector(
     (store) => store.player.course.modules[moduleIndex],
   )
+  const currentLessonId = useStoreSelector((store) => {
+    const { currentModuleIndex, currentLessonIndex } = store.player
+    return store.player.course.modules[currentModuleIndex].lessons[
+      currentLessonIndex
+    ].id
+  })
 
   const handlePlayLesson = (lessonIndex: number) => {
     dispatch(play({ moduleIndex, lessonIndex }))
@@ -55,6 +61,7 @@ export const Module: FC<ModulePros> = ({
               title={lesson.title}
               duration={lesson.duration}
               onPlay={() => handlePlayLesson(index)}
+              isCurrent={lesson.id === currentLessonId}
             />
           ))}
         </nav>
