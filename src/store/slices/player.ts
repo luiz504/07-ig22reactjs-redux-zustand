@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { useStoreSelector } from '..'
 
 type Lesson = {
   id: string
@@ -112,3 +113,14 @@ const playerSlice = createSlice({
 export const playerReducer = playerSlice.reducer
 
 export const { play, next } = playerSlice.actions
+
+export const usePlayerCurrents = () =>
+  useStoreSelector((store) => {
+    const { currentModuleIndex, currentLessonIndex, course } = store.player
+
+    const currentModule = course.modules[currentModuleIndex]
+
+    const currentLesson = currentModule.lessons[currentLessonIndex]
+
+    return { currentModule, currentLesson }
+  })

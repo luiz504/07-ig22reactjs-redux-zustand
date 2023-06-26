@@ -1,26 +1,26 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import ReactPlayer from 'react-player'
-import { useStoreSelector } from '../store'
 import { useDispatch } from 'react-redux'
-import { next } from '../store/slices/player'
+
+import { next, usePlayerCurrents } from '../store/slices/player'
 
 export const Video: React.FC = () => {
   const dispatch = useDispatch()
-  const videoURL = useStoreSelector((store) => {
-    const { currentModuleIndex, currentLessonIndex, course } = store.player
-    const currentLessonId =
-      course.modules[currentModuleIndex].lessons[currentLessonIndex].id
+  const { currentLesson } = usePlayerCurrents()
 
-    const videoURL = currentLessonId
-      ? `https://www.youtube.com/watch?v=${currentLessonId}`
-      : ''
+  const currentLessonId = currentLesson.id
 
-    return videoURL
-  })
+  const videoURL = currentLessonId
+    ? `https://www.youtube.com/watch?v=${currentLessonId}`
+    : ''
 
   const handlePlayNext = () => {
     dispatch(next())
   }
+
+  useEffect(() => {
+    document.title = `Watching: ${currentLesson.title}`
+  }, [currentLesson?.title])
 
   return (
     <div className="w-full bg-zinc-950 aspect-video">
@@ -28,7 +28,6 @@ export const Video: React.FC = () => {
         width={'100%'}
         height={'100%'}
         controls
-        playing
         url={videoURL}
         onEnded={handlePlayNext}
       />
