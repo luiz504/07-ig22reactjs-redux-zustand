@@ -4,6 +4,8 @@ import { ChevronDown } from 'lucide-react'
 
 import { Lesson } from './Lesson'
 
+import { useStoreSelector } from '../store'
+
 interface ModulePros {
   moduleIndex: number
   title: string
@@ -15,10 +17,13 @@ export const Module: FC<ModulePros> = ({
   title,
   amountOfLessons,
 }) => {
+  const module = useStoreSelector(
+    (store) => store.player.course.modules[moduleIndex - 1],
+  )
   return (
     <Collapsible.Root className="group">
       <Collapsible.Trigger asChild>
-        <button className="flex w-full p-4 items-center gap-3  bg-zinc-800  border border-zinc-800 hover:bg-zinc-700 hover:border-zinc-700 transition  focus:outline-none focus:border-zinc-100">
+        <button className="flex w-full p-4 items-center gap-3  bg-zinc-800  border border-zinc-800 hover:bg-zinc-700         hover:border-zinc-700 transition  focus:outline-none focus:border-zinc-100">
           <div className="flex items-center justify-center h-10 w-10 rounded-full bg-zinc-950 text-xs">
             {moduleIndex}
           </div>
@@ -36,9 +41,13 @@ export const Module: FC<ModulePros> = ({
       </Collapsible.Trigger>
       <Collapsible.Content asChild>
         <nav className="relative flex flex-col gap-4 p-6">
-          <Lesson title="Redux Fundamentals" duration="09:13" />
-          <Lesson title="Redux Fundamentals" duration="09:13" />
-          <Lesson title="Redux Fundamentals" duration="09:13" />
+          {module.lessons.map((lesson) => (
+            <Lesson
+              key={lesson.id}
+              title={lesson.title}
+              duration={lesson.duration}
+            />
+          ))}
         </nav>
       </Collapsible.Content>
     </Collapsible.Root>

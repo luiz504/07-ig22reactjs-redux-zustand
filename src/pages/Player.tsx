@@ -4,9 +4,11 @@ import { MessageCircle } from 'lucide-react'
 import { Header } from '../components/Header'
 import { Video } from '../components/Video'
 import { Module } from '../components/Module'
+import { useStoreSelector } from '../store'
 
 export const Player: React.FC = () => {
-  const modules = Array.from({ length: 4 }, (_, i) => ({ id: i }))
+  const modules = useStoreSelector((store) => store.player.course.modules)
+
   return (
     <div className="h-screen bg-zinc-950 text-zinc-50 flex justify-center items-center">
       <div className="flex w-[1100px] flex-col gap-6">
@@ -29,8 +31,8 @@ export const Player: React.FC = () => {
               <Module
                 key={item.id}
                 moduleIndex={index + 1}
-                title="Desmistifing Redux"
-                amountOfLessons={3}
+                title={item.title}
+                amountOfLessons={item.lessons.length}
               />
             ))}
           </aside>
