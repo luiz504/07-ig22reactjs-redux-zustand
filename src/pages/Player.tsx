@@ -4,15 +4,14 @@ import { MessageCircle } from 'lucide-react'
 import { Header } from '../components/Header'
 import { Video } from '../components/Video'
 import { Module } from '../components/Module'
-import { useStoreSelector } from '../store'
-import { start, usePlayerCurrents } from '../store/slices/player'
-import { api } from '../lib/axios'
-import { useDispatch } from 'react-redux'
+
+import { useStoreDispatch, useStoreSelector } from '../store'
+import { loadCourse, usePlayerCurrents } from '../store/slices/player'
 
 export const Player: React.FC = () => {
   const modules = useStoreSelector((store) => store.player.course?.modules)
   const { currentLesson } = usePlayerCurrents()
-  const dispatch = useDispatch()
+  const dispatch = useStoreDispatch()
 
   useEffect(() => {
     if (currentLesson?.title) {
@@ -21,9 +20,7 @@ export const Player: React.FC = () => {
   }, [currentLesson?.title])
 
   useEffect(() => {
-    api.get('/courses/1').then(({ data }) => {
-      dispatch(start(data))
-    })
+    dispatch(loadCourse())
   }, [dispatch])
 
   return (

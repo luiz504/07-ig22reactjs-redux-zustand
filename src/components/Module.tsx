@@ -4,8 +4,8 @@ import { ChevronDown } from 'lucide-react'
 
 import { Lesson } from './Lesson'
 
-import { useStoreSelector } from '../store'
-import { useDispatch } from 'react-redux'
+import { useStoreDispatch, useStoreSelector } from '../store'
+
 import { play, usePlayerCurrents } from '../store/slices/player'
 
 interface ModulePros {
@@ -19,7 +19,7 @@ export const Module: FC<ModulePros> = ({
   title,
   amountOfLessons,
 }) => {
-  const dispatch = useDispatch()
+  const dispatch = useStoreDispatch()
 
   const { currentLesson } = usePlayerCurrents()
   const module = useStoreSelector(
