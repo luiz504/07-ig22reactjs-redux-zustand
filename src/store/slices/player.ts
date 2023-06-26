@@ -20,7 +20,7 @@ type PlayerState = {
   currentLessonIndex: number
 }
 
-const playerSlice = createSlice({
+export const playerSlice = createSlice({
   name: 'player',
   initialState: {
     course: {
@@ -86,8 +86,13 @@ const playerSlice = createSlice({
       { payload }: PayloadAction<{ moduleIndex: number; lessonIndex: number }>,
     ) => {
       const { moduleIndex, lessonIndex } = payload
-      state.currentModuleIndex = moduleIndex
-      state.currentLessonIndex = lessonIndex
+
+      const lesson = state.course.modules?.[moduleIndex]?.lessons[lessonIndex]
+
+      if (lesson) {
+        state.currentModuleIndex = moduleIndex
+        state.currentLessonIndex = lessonIndex
+      }
     },
     next: (state) => {
       const nextLessonIndex = state.currentLessonIndex + 1
