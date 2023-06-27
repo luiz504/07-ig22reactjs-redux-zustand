@@ -8,7 +8,6 @@ import {
   playerReducer,
   playerSlice,
 } from './player'
-import { axiosMock } from '../../lib/axiosMock'
 import { configureStore } from '@reduxjs/toolkit'
 
 const mockCourseData = {
@@ -48,15 +47,14 @@ const exampleState: PlayerState = {
 }
 const playerSliceInitialState = playerSlice.getInitialState()
 
-describe('player slice', () => {
+describe('Redux Player slice', () => {
   it('should be able to handle loadCourse.pending action', async () => {
-    axiosMock.onGet('/courses/1').reply(200, mockCourseData)
     const store = configureStore({
       reducer: { player: playerReducer },
       preloadedState: {
         player: {
           ...playerSliceInitialState,
-          isLoading: false, // true on first react, but can be false on subsequent
+          isLoading: false, // true on first render, but can be false on subsequent
           course: {} as any, // test if it will be reset on the process
         },
       },
@@ -111,7 +109,7 @@ describe('player slice', () => {
     expect(state.course).toBeNull()
   })
 
-  it('should be able to play', () => {
+  it('should be able to play a lesson', () => {
     const initialState = exampleState
     const state = playerReducer(
       initialState,
@@ -122,7 +120,7 @@ describe('player slice', () => {
     expect(state.currentLessonIndex).toEqual(1)
   })
 
-  it('should able to update the current module and lesson index if there no valid lesson with the indexs informed', () => {
+  it('should not be able to play a lesson if it doest exists', () => {
     const initialState = exampleState
     const state = playerReducer(
       initialState,
