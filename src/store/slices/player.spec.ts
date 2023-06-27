@@ -1,42 +1,116 @@
 import { expect, describe, it } from 'vitest'
-import { PlayerState, next, play, playerReducer } from './player'
 
+import {
+  PlayerState,
+  loadCourse,
+  next,
+  play,
+  playerReducer,
+  playerSlice,
+} from './player'
+import { axiosMock } from '../../lib/axiosMock'
+import { configureStore } from '@reduxjs/toolkit'
+
+const mockCourseData = {
+  id: 1,
+  modules: [
+    {
+      id: '1',
+      title: 'Iniciando com React',
+      lessons: [
+        { id: 'Jai8w6K_GnY', title: 'CSS Modules', duration: '13:45' },
+        {
+          id: 'w-DW4DhDfcw',
+          title: 'Estilização do Post',
+          duration: '10:05',
+        },
+      ],
+    },
+    {
+      id: '2',
+      title: 'Estrutura da aplicação',
+      lessons: [
+        {
+          id: 'gE48FQXRZ_o',
+          title: 'Componente: Comment',
+          duration: '13:45',
+        },
+        { id: 'Ng_Vk4tBl0g', title: 'Responsividade', duration: '10:05' },
+      ],
+    },
+  ],
+}
 const exampleState: PlayerState = {
-  course: {
-    id: 1,
-    modules: [
-      {
-        id: '1',
-        title: 'Iniciando com React',
-        lessons: [
-          { id: 'Jai8w6K_GnY', title: 'CSS Modules', duration: '13:45' },
-          {
-            id: 'w-DW4DhDfcw',
-            title: 'Estilização do Post',
-            duration: '10:05',
-          },
-        ],
-      },
-      {
-        id: '2',
-        title: 'Estrutura da aplicação',
-        lessons: [
-          {
-            id: 'gE48FQXRZ_o',
-            title: 'Componente: Comment',
-            duration: '13:45',
-          },
-          { id: 'Ng_Vk4tBl0g', title: 'Responsividade', duration: '10:05' },
-        ],
-      },
-    ],
-  },
+  course: mockCourseData,
   currentModuleIndex: 0,
   currentLessonIndex: 0,
   isLoading: false,
 }
+const playerSliceInitialState = playerSlice.getInitialState()
 
 describe('player slice', () => {
+  it('should be able to handle loadCourse.pending action', async () => {
+    axiosMock.onGet('/courses/1').reply(200, mockCourseData)
+    const store = configureStore({
+      reducer: { player: playerReducer },
+      preloadedState: {
+        player: {
+          ...playerSliceInitialState,
+          isLoading: false, // true on first react, but can be false on subsequent
+          course: {} as any, // test if it will be reset on the process
+        },
+      },
+    })
+
+    store.dispatch(loadCourse())
+
+    const state = store.getState().player
+
+    expect(state.isLoading).toBe(true)
+    expect(state.course).toBeNull()
+  })
+
+  it('should be able to handle loadCourse.fulfilled action"', async () => {
+    const store = configureStore({
+      reducer: { player: playerReducer },
+      preloadedState: {
+        player: playerSliceInitialState,
+      },
+    })
+
+    const action = {
+      type: loadCourse.fulfilled.type,
+      payload: mockCourseData,
+    }
+
+    store.dispatch(action)
+
+    const state = store.getState().player
+
+    expect(state.isLoading).toBe(false)
+    expect(state.course).toEqual(mockCourseData)
+  })
+
+  it('should be able to handle loadCourse.rejected action', () => {
+    const store = configureStore({
+      reducer: { player: playerReducer },
+      preloadedState: {
+        player: { ...playerSliceInitialState, course: {} as any },
+      },
+    })
+
+    const action = {
+      type: loadCourse.rejected.type,
+    }
+
+    store.dispatch(action)
+
+    const state = store.getState().player
+
+    expect(state.isLoading).toBe(false)
+    expect(state.course).toBeNull()
+  })
+
   it('should be able to play', () => {
     const initialState = exampleState
     const state = playerReducer(

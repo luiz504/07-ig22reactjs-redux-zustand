@@ -79,6 +79,7 @@ export const playerSlice = createSlice({
     )
     builder.addCase(loadCourse.rejected, (state) => {
       state.isLoading = false
+      state.course = null
     })
   },
 })
