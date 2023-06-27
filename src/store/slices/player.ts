@@ -2,35 +2,31 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { useStoreSelector } from '..'
 import { api } from '../../lib/axios'
 
-type Lesson = {
-  id: string
-  title: string
-  duration: string
-}
-type Module = {
-  id: string
-  title: string
-  lessons: Lesson[]
-}
 type Course = {
   id: number
-  modules: Module[]
+  modules: Array<{
+    id: string
+    title: string
+    lessons: Array<{ id: string; title: string; duration: string }>
+  }>
 }
+
 export type PlayerState = {
   course: Course | null
   currentModuleIndex: number
   currentLessonIndex: number
+  isLoading: boolean
 }
 
 const initialState: PlayerState = {
   course: null,
   currentModuleIndex: 0,
   currentLessonIndex: 0,
+  isLoading: true,
 }
 
 export const loadCourse = createAsyncThunk('player/load', async () => {
   const response = await api.get('/courses/1')
-  console.log('data', response.data)
   return response.data
 })
 
@@ -71,12 +67,19 @@ export const playerSlice = createSlice({
     },
   },
   extraReducers(builder) {
+    builder.addCase(loadCourse.pending, (state) => {
+      Object.assign(state, initialState)
+    })
     builder.addCase(
       loadCourse.fulfilled,
       (state, { payload }: PayloadAction<Course>) => {
         state.course = payload
+        state.isLoading = false
       },
     )
+    builder.addCase(loadCourse.rejected, (state) => {
+      state.isLoading = false
+    })
   },
 })
 

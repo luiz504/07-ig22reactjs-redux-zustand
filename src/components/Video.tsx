@@ -1,12 +1,13 @@
 import ReactPlayer from 'react-player'
 
 import { next, usePlayerCurrents } from '../store/slices/player'
-import { useStoreDispatch } from '../store'
+import { useStoreDispatch, useStoreSelector } from '../store'
+import { Loader } from 'lucide-react'
 
 export const Video = () => {
   const dispatch = useStoreDispatch()
   const { currentLesson } = usePlayerCurrents()
-  if (!currentLesson) return null
+  const isCourseLoading = useStoreSelector((store) => store.player.isLoading)
 
   const currentLessonId = currentLesson?.id
 
@@ -20,13 +21,25 @@ export const Video = () => {
 
   return (
     <div className="w-full bg-zinc-950 aspect-video">
-      <ReactPlayer
-        width={'100%'}
-        height={'100%'}
-        controls
-        url={videoURL}
-        onEnded={handlePlayNext}
-      />
+      {isCourseLoading && (
+        <div className="flex h-full items-center justify-center">
+          <Loader className="w-8 h-8 text-zinc-400 animate-spin" />
+        </div>
+      )}
+
+      {!isCourseLoading && (
+        <>
+          {currentLesson && (
+            <ReactPlayer
+              width={'100%'}
+              height={'100%'}
+              controls
+              url={videoURL}
+              onEnded={handlePlayNext}
+            />
+          )}
+        </>
+      )}
     </div>
   )
 }
