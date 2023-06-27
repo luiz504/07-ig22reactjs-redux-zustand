@@ -2,11 +2,10 @@ import { FC } from 'react'
 import * as Collapsible from '@radix-ui/react-collapsible'
 import { ChevronDown } from 'lucide-react'
 
-import { Lesson } from './Lesson'
+import { Lesson } from '~/components/Lesson'
 
-import { useStoreDispatch, useStoreSelector } from '../store'
-
-import { play, usePlayerCurrents } from '../store/slices/player'
+import { useStoreDispatch, useStoreSelector } from '~/storeRedux'
+import { play, playerCurrentsSelector } from '~/storeRedux/slices/player'
 
 interface ModulePros {
   moduleIndex: number
@@ -21,7 +20,7 @@ export const Module: FC<ModulePros> = ({
 }) => {
   const dispatch = useStoreDispatch()
 
-  const { currentLesson } = usePlayerCurrents()
+  const { currentLesson } = useStoreSelector(playerCurrentsSelector)
   const module = useStoreSelector(
     (store) => store.player.course?.modules?.[moduleIndex],
   )

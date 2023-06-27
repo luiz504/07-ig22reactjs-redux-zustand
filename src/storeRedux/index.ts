@@ -9,8 +9,8 @@ export const store = configureStore({
   },
 })
 
-export type RootState = ReturnType<typeof store.getState>
-export const useStoreSelector: TypedUseSelectorHook<RootState> = useSelector
+export type RootStore = ReturnType<typeof store.getState>
+export const useStoreSelector: TypedUseSelectorHook<RootStore> = useSelector
 
 export type StoreDispatch = typeof store.dispatch
 export const useStoreDispatch: () => StoreDispatch = useDispatch

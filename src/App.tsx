@@ -1,12 +1,17 @@
 import { Provider as ReduxProvider } from 'react-redux'
 
-import { store } from './store'
-import { Player } from './pages/Player'
+import { store } from './storeRedux'
+import { PlayerRedux } from './pages/PlayerRedux'
 
 export function App() {
-  return (
-    <ReduxProvider store={store}>
-      <Player />
-    </ReduxProvider>
-  )
+  const mode: 'zustand' | 'redux' = 'redux'
+
+  if (mode === 'redux') {
+    return (
+      <ReduxProvider store={store}>
+        <PlayerRedux />
+      </ReduxProvider>
+    )
+  }
+  return null
 }

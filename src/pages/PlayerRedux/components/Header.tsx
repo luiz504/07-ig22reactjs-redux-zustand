@@ -1,8 +1,10 @@
-import { useStoreSelector } from '../store'
-import { usePlayerCurrents } from '../store/slices/player'
+import { useStoreSelector } from '~/storeRedux'
+import { playerCurrentsSelector } from '~/storeRedux/slices/player'
 
 export const Header = () => {
-  const { currentLesson, currentModule } = usePlayerCurrents()
+  const { currentLesson, currentModule } = useStoreSelector(
+    playerCurrentsSelector,
+  )
   const isCourseLoading = useStoreSelector((store) => store.player.isLoading)
 
   if (isCourseLoading) {

@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react'
 import { MessageCircle } from 'lucide-react'
 
-import { Header } from '../components/Header'
-import { Video } from '../components/Video'
-import { Module } from '../components/Module'
+import { useStoreDispatch, useStoreSelector } from '~/storeRedux'
+import { loadCourse, playerCurrentsSelector } from '~/storeRedux/slices/player'
 
-import { useStoreDispatch, useStoreSelector } from '../store'
-import { loadCourse, usePlayerCurrents } from '../store/slices/player'
+import { Header } from './components/Header'
+import { Video } from './components/Video'
+import { Module } from './components/Module'
 
-export const Player: React.FC = () => {
+export const PlayerRedux: React.FC = () => {
   const modules = useStoreSelector((store) => store.player.course?.modules)
-  const { currentLesson } = usePlayerCurrents()
+  const { currentLesson } = useStoreSelector(playerCurrentsSelector)
   const dispatch = useStoreDispatch()
 
   useEffect(() => {

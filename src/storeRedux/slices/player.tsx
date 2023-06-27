@@ -1,5 +1,10 @@
-import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { useStoreSelector } from '..'
+import {
+  PayloadAction,
+  createAsyncThunk,
+  createSlice,
+  createSelector,
+} from '@reduxjs/toolkit'
+import { RootStore } from '..'
 import { api } from '../../lib/axios'
 
 type Course = {
@@ -88,13 +93,17 @@ export const playerReducer = playerSlice.reducer
 
 export const { play, next } = playerSlice.actions
 
-export const usePlayerCurrents = () =>
-  useStoreSelector((store) => {
-    const { currentModuleIndex, currentLessonIndex, course } = store.player
+const getPlayerState = (state: RootStore) => state.player
+
+export const playerCurrentsSelector = createSelector(
+  [getPlayerState],
+  (state) => {
+    const { currentModuleIndex, currentLessonIndex, course } = state
 
     const currentModule = course?.modules[currentModuleIndex]
 
     const currentLesson = currentModule?.lessons[currentLessonIndex]
 
     return { currentModule, currentLesson }
-  })
+  },
+)

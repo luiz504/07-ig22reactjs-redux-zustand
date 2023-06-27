@@ -1,12 +1,12 @@
 import ReactPlayer from 'react-player'
 
-import { next, usePlayerCurrents } from '../store/slices/player'
-import { useStoreDispatch, useStoreSelector } from '../store'
 import { Loader } from 'lucide-react'
+import { useStoreDispatch, useStoreSelector } from '~/storeRedux'
+import { next, playerCurrentsSelector } from '~/storeRedux/slices/player'
 
 export const Video = () => {
   const dispatch = useStoreDispatch()
-  const { currentLesson } = usePlayerCurrents()
+  const { currentLesson } = useStoreSelector(playerCurrentsSelector)
   const isCourseLoading = useStoreSelector((store) => store.player.isLoading)
 
   const currentLessonId = currentLesson?.id
