@@ -6,15 +6,7 @@ import {
 } from '@reduxjs/toolkit'
 import { RootStore } from '..'
 import { api } from '../../lib/axios'
-
-type Course = {
-  id: number
-  modules: Array<{
-    id: string
-    title: string
-    lessons: Array<{ id: string; title: string; duration: string }>
-  }>
-}
+import { Course } from '~/types/Course'
 
 export type PlayerState = {
   course: Course | null
