@@ -1,14 +1,19 @@
 import { Provider as ReduxProvider } from 'react-redux'
-import { AddTodo } from './components/AddTodo'
-import { TodoList } from './components/TodoList'
 
-import { store } from './store'
+import { store } from './storeRedux'
+import { PlayerRedux } from './pages/PlayerRedux'
+import { PlayerZustand } from './pages/PlayerZustand'
 
 export function App() {
-  return (
-    <ReduxProvider store={store}>
-      <TodoList />
-      <AddTodo />
-    </ReduxProvider>
-  )
+  const mode: 'zustand' | 'redux' = 'zustand'
+
+  // @ts-expect-error If you set the mod to 'zustand'
+  if (mode === 'redux') {
+    return (
+      <ReduxProvider store={store}>
+        <PlayerRedux />
+      </ReduxProvider>
+    )
+  }
+  return <PlayerZustand />
 }
