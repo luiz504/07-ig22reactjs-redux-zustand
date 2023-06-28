@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "server": "json-server server.json",
+    "server": "json-server server.json -w -d 1000",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview -w -d 1000",
+    "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest"
   },
@@ -16,6 +16,7 @@
     "@radix-ui/react-collapsible": "^1.0.3",
     "@reduxjs/toolkit": "^1.9.5",
     "axios": "^1.4.0",
+    "class-variance-authority": "^0.6.1",
     "lucide-react": "^0.252.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -38,6 +39,7 @@
     "json-server": "^0.17.3",
     "postcss": "^8.4.24",
     "redux-mock-store": "^1.5.4",
+    "tailwind-merge": "^1.13.2",
     "tailwind-scrollbar": "^3.0.4",
     "tailwindcss": "^3.3.2",
     "typescript": "^5.0.2",

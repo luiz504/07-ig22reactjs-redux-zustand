@@ -7,9 +7,11 @@ import { loadCourse, playerCurrentsSelector } from '~/storeRedux/slices/player'
 import { Header } from './components/Header'
 import { Video } from './components/Video'
 import { Module } from './components/Module'
+import { Skeleton } from '~/components/Skeleton'
 
 export const PlayerRedux: React.FC = () => {
   const modules = useStoreSelector((store) => store.player.course?.modules)
+  const isLoading = useStoreSelector((store) => store.player.isLoading)
   const { currentLesson } = useStoreSelector(playerCurrentsSelector)
   const dispatch = useStoreDispatch()
 
@@ -49,6 +51,23 @@ export const PlayerRedux: React.FC = () => {
                 amountOfLessons={item.lessons.length}
               />
             ))}
+
+            {isLoading && (
+              <Skeleton className="flex p-4 border-2 dark:border-gray-700">
+                <div className="flex gap-3 flex-1">
+                  <Skeleton
+                    className="rounded-full w-10 h-10 min-w-[40px]"
+                    bg={'dark800'}
+                  />
+                  <div className="flex flex-col gap-1 w-full">
+                    <Skeleton bg={'dark800'} />
+                    <Skeleton bg={'dark800'} />
+                  </div>
+
+                  <div className="w-5 ml-1"></div>
+                </div>
+              </Skeleton>
+            )}
           </aside>
         </main>
       </div>

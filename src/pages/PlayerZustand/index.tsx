@@ -5,11 +5,13 @@ import { Header } from './components/Header'
 import { Video } from './components/Video'
 import { Module } from './components/Module'
 import { usePlayerCurrents, useStore } from '~/storeZustand'
+import { Skeleton } from '~/components/Skeleton'
 
 export const PlayerZustand: React.FC = () => {
-  const { loadCourse, modules } = useStore((store) => ({
+  const { loadCourse, isLoading, modules } = useStore((store) => ({
     modules: store?.course?.modules,
     loadCourse: store.loadCourse,
+    isLoading: store.isLoading,
   }))
   const { currentLesson } = usePlayerCurrents()
 
@@ -49,6 +51,22 @@ export const PlayerZustand: React.FC = () => {
                 amountOfLessons={item.lessons.length}
               />
             ))}
+            {isLoading && (
+              <Skeleton className="flex p-4 border-2 dark:border-gray-700">
+                <div className="flex gap-3 flex-1">
+                  <Skeleton
+                    className="rounded-full w-10 h-10 min-w-[40px]"
+                    bg={'dark800'}
+                  />
+                  <div className="flex flex-col gap-1 w-full">
+                    <Skeleton bg={'dark800'} />
+                    <Skeleton bg={'dark800'} />
+                  </div>
+
+                  <div className="w-5 ml-1"></div>
+                </div>
+              </Skeleton>
+            )}
           </aside>
         </main>
       </div>
